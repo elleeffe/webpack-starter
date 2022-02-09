@@ -13,7 +13,7 @@ module.exports = {
   devtool: 'inline-source-map',
   mode: 'development',
   output: {
-    filename: 'bundle.js',
+    filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'dist'),
     clean: true,
     publicPath: '/',
@@ -23,7 +23,7 @@ module.exports = {
       title: 'Basic webpack config',
     }),
     new MiniCssExtractPlugin({
-      filename: 'index.css'
+      filename: '[name].[contenthash].css',
     })
   ],
   module: {
@@ -46,5 +46,18 @@ module.exports = {
   devServer: {
     static: './dist',
     compress: true,
+  },
+  optimization: {
+    moduleIds: 'deterministic',
+    runtimeChunk: 'single',
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+      },
+    },
   },
 };
